@@ -37,12 +37,12 @@
         <label>Image or Video (optional — a gradient will display if empty)</label>
         <div class="file-input-wrap">
           <input type="file" name="file" id="new-slide-file"
-                 accept=".jpg,.jpeg,.png,.gif,.webp,.mp4,.webm,.ogg">
+                 accept=".jpg,.jpeg,.png,.gif,.webp,.mp4,.webm,.ogg,.mov">
           <div class="file-input-label">
             📎 &nbsp;Choose image or video…
           </div>
         </div>
-        <p class="file-hint">Accepted: JPG, PNG, GIF, WebP, MP4, WebM — max 50 MB</p>
+        <p class="file-hint">Accepted: JPG, PNG, GIF, WebP, MP4, WebM, MOV — max 50 MB</p>
       </div>
 
       <button type="submit" class="btn btn-primary">
@@ -146,7 +146,7 @@
               <label>Replace Image / Video (leave empty to keep current)</label>
               <div class="file-input-wrap">
                 <input type="file" name="file"
-                       accept=".jpg,.jpeg,.png,.gif,.webp,.mp4,.webm,.ogg">
+                       accept=".jpg,.jpeg,.png,.gif,.webp,.mp4,.webm,.ogg,.mov">
                 <div class="file-input-label">📎 &nbsp;Choose new file…</div>
               </div>
               {% if slide.file %}

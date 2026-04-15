@@ -39,7 +39,7 @@ SLIDER_UPLOAD_DIR    = UPLOADS_DIR / "slider"
 SECRET_KEY_FILE      = BASE_DIR / ".secret_key"
 
 ALLOWED_IMAGE_EXT = {"jpg", "jpeg", "png", "gif", "webp"}
-ALLOWED_VIDEO_EXT = {"mp4", "webm", "ogg"}
+ALLOWED_VIDEO_EXT = {"mp4", "webm", "ogg", "mov"}
 ALLOWED_ALL_EXT   = ALLOWED_IMAGE_EXT | ALLOWED_VIDEO_EXT
 MAX_UPLOAD_BYTES  = 50 * 1024 * 1024   # 50 MB
 
@@ -200,7 +200,12 @@ def _get_csrf_token() -> str:
 
 
 def _check_csrf() -> bool:
-    return request.form.get("csrf_token") == session.get("_csrf")
+    """Accept CSRF token from a form field OR from a JSON body."""
+    token = request.form.get("csrf_token")
+    if token is None:
+        payload = request.get_json(silent=True) or {}
+        token = payload.get("csrf_token")
+    return token == session.get("_csrf")
 
 
 app.jinja_env.globals["csrf_token"] = _get_csrf_token
@@ -420,10 +425,10 @@ def admin_slider_delete(slide_id):
 @login_required
 def admin_slider_reorder():
     payload = request.get_json(silent=True) or {}
-    if not isinstance(payload.get("order"), list):
-        return jsonify({"error": "invalid payload"}), 400
     if not _check_csrf():
         return jsonify({"error": "csrf"}), 403
+    if not isinstance(payload.get("order"), list):
+        return jsonify({"error": "invalid payload"}), 400
 
     data  = _read_json(DATA_DIR / "slider.json")
     index = {i["id"]: i for i in data.get("items", [])}

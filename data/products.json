@@ -1,0 +1,52 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "order": 1,
+      "name": "White Taftoon Bread",
+      "name_fa": "نان تافتون سفید",
+      "description": "Baked fresh every morning — feather-light, golden at the edges, and soft at the heart. Made with pure flour and a touch of tradition.",
+      "image": null
+    },
+    {
+      "id": 2,
+      "order": 2,
+      "name": "Whole Wheat Taftoon Bread",
+      "name_fa": "نان تافتون سبوس‌دار",
+      "description": "Wholesome and nutty, baked from stone-ground whole wheat. A heartier choice that honours flavour and nutrition equally.",
+      "image": null
+    },
+    {
+      "id": 3,
+      "order": 3,
+      "name": "Sar Shir",
+      "name_fa": "سر شیر",
+      "description": "Velvety clotted cream, patiently skimmed from fresh whole milk. Luxuriously rich — a perfect companion for warm bread and honey.",
+      "image": null
+    },
+    {
+      "id": 4,
+      "order": 4,
+      "name": "Khame",
+      "name_fa": "خامه",
+      "description": "Silky fresh cream with a naturally gentle sweetness. Made daily from the finest local milk, beautiful in cooking or on its own.",
+      "image": null
+    },
+    {
+      "id": 5,
+      "order": 5,
+      "name": "Mast",
+      "name_fa": "ماست",
+      "description": "Thick, luscious homemade yogurt, naturally fermented to a smooth and tangy perfection. Rich in live cultures and pure flavour.",
+      "image": null
+    },
+    {
+      "id": 6,
+      "order": 6,
+      "name": "Doogh",
+      "name_fa": "دوغ",
+      "description": "A chilled, refreshing traditional yogurt drink — lightly salted and naturally cooling. The quintessential Persian table companion.",
+      "image": null
+    }
+  ]
+}

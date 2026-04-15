@@ -17,11 +17,11 @@ env/
 .secret_key
 .env
 
-# Data (persisted locally — back up separately)
-data/
-
-# Uploaded media (store outside repo)
-static/uploads/
+# Uploaded media — track directory structure but not the files themselves
+static/uploads/products/*
+!static/uploads/products/.gitkeep
+static/uploads/slider/*
+!static/uploads/slider/.gitkeep
 
 # OS
 .DS_Store
