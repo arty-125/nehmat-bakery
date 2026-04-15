@@ -24,7 +24,7 @@ from functools import wraps
 
 from flask import (
     Flask, render_template, request, redirect,
-    url_for, session, flash, jsonify,
+    url_for, session, flash, jsonify, make_response,
 )
 from werkzeug.security import check_password_hash, generate_password_hash
 from werkzeug.utils import secure_filename
@@ -37,6 +37,7 @@ UPLOADS_DIR          = BASE_DIR / "static" / "uploads"
 PRODUCTS_UPLOAD_DIR  = UPLOADS_DIR / "products"
 SLIDER_UPLOAD_DIR    = UPLOADS_DIR / "slider"
 SECRET_KEY_FILE      = BASE_DIR / ".secret_key"
+TRANSLATIONS_DIR     = BASE_DIR / "translations"
 
 ALLOWED_IMAGE_EXT = {"jpg", "jpeg", "png", "gif", "webp"}
 ALLOWED_VIDEO_EXT = {"mp4", "webm", "ogg", "mov"}
@@ -80,6 +81,21 @@ def _write_json(path: Path, data: dict) -> None:
         tmp.replace(path)
 
 
+# ── i18n helpers ─────────────────────────────────────────────────────────────
+def _load_translations() -> dict:
+    result: dict = {}
+    for lang in ("en", "fa"):
+        path = TRANSLATIONS_DIR / f"{lang}.json"
+        try:
+            result[lang] = json.loads(path.read_text(encoding="utf-8"))
+        except (FileNotFoundError, json.JSONDecodeError):
+            result[lang] = {}
+    return result
+
+
+_translations: dict = _load_translations()
+
+
 # ── Seed default data ────────────────────────────────────────────────────────
 def _seed_defaults() -> None:
     products_file = DATA_DIR / "products.json"
@@ -93,66 +109,48 @@ def _seed_defaults() -> None:
                     "id": 1, "order": 1,
                     "name": "White Taftoon Bread",
                     "name_fa": "نان تافتون سفید",
-                    "description": (
-                        "Baked fresh every morning — feather-light, "
-                        "golden at the edges, and soft at the heart. "
-                        "Made with pure flour and a touch of tradition."
-                    ),
+                    "description": "Baked fresh every morning — feather-light, golden at the edges, and soft at the heart. Made with pure flour and a touch of tradition.",
+                    "description_fa": "هر صبح تازه پخته می‌شود — سبک، طلایی از لبه‌ها و نرم در دل. با آرد خالص و لمسی از سنت.",
                     "image": None,
                 },
                 {
                     "id": 2, "order": 2,
                     "name": "Whole Wheat Taftoon Bread",
                     "name_fa": "نان تافتون سبوس‌دار",
-                    "description": (
-                        "Wholesome and nutty, baked from stone-ground "
-                        "whole wheat. A heartier choice that honours "
-                        "flavour and nutrition equally."
-                    ),
+                    "description": "Wholesome and nutty, baked from stone-ground whole wheat. A heartier choice that honours flavour and nutrition equally.",
+                    "description_fa": "سالم و خوش‌طعم، با آرد گندم کامل آسیاب‌شده. انتخابی ماندگارتر که هم طعم دارد هم ارزش غذایی.",
                     "image": None,
                 },
                 {
                     "id": 3, "order": 3,
                     "name": "Sar Shir",
                     "name_fa": "سر شیر",
-                    "description": (
-                        "Velvety clotted cream, patiently skimmed from "
-                        "fresh whole milk. Luxuriously rich — a perfect "
-                        "companion for warm bread and honey."
-                    ),
+                    "description": "Velvety clotted cream, patiently skimmed from fresh whole milk. Luxuriously rich — a perfect companion for warm bread and honey.",
+                    "description_fa": "سرشیر مخملی، با صبر از شیر کامل تازه گرفته شده. غنی و لوکس — همراه بی‌نظیر نان گرم و عسل.",
                     "image": None,
                 },
                 {
                     "id": 4, "order": 4,
                     "name": "Khame",
                     "name_fa": "خامه",
-                    "description": (
-                        "Silky fresh cream with a naturally gentle "
-                        "sweetness. Made daily from the finest local "
-                        "milk, beautiful in cooking or on its own."
-                    ),
+                    "description": "Silky fresh cream with a naturally gentle sweetness. Made daily from the finest local milk, beautiful in cooking or on its own.",
+                    "description_fa": "خامه تازه با شیرینی ملایم طبیعی. هر روز از بهترین شیر محلی تهیه می‌شود، برای پخت یا به‌تنهایی.",
                     "image": None,
                 },
                 {
                     "id": 5, "order": 5,
                     "name": "Mast",
                     "name_fa": "ماست",
-                    "description": (
-                        "Thick, luscious homemade yogurt, naturally "
-                        "fermented to a smooth and tangy perfection. "
-                        "Rich in live cultures and pure flavour."
-                    ),
+                    "description": "Thick, luscious homemade yogurt, naturally fermented to a smooth and tangy perfection. Rich in live cultures and pure flavour.",
+                    "description_fa": "ماست خانگی غلیظ و مطبوع، با تخمیر طبیعی به کمال رسیده. سرشار از کشت‌های زنده و طعمی خالص.",
                     "image": None,
                 },
                 {
                     "id": 6, "order": 6,
                     "name": "Doogh",
                     "name_fa": "دوغ",
-                    "description": (
-                        "A chilled, refreshing traditional yogurt drink "
-                        "— lightly salted and naturally cooling. The "
-                        "quintessential Persian table companion."
-                    ),
+                    "description": "A chilled, refreshing traditional yogurt drink — lightly salted and naturally cooling. The quintessential Persian table companion.",
+                    "description_fa": "نوشیدنی سنتی ماست — خنک، کمی شور و به‌طور طبیعی تازه‌کننده. همراه همیشگی سفره ایرانی.",
                     "image": None,
                 },
             ]
@@ -165,19 +163,25 @@ def _seed_defaults() -> None:
                     "id": "slide-1", "order": 1, "type": "image",
                     "file": None,
                     "caption": "Welcome to Nehmat Bakery",
+                    "caption_fa": "به نانوایی نعمت خوش آمدید",
                     "subcaption": "Fresh bread & dairy, made with love every morning.",
+                    "subcaption_fa": "نان تازه و لبنیات خانگی، هر صبح با عشق.",
                 },
                 {
                     "id": "slide-2", "order": 2, "type": "image",
                     "file": None,
                     "caption": "Traditional Taftoon Bread",
+                    "caption_fa": "نان تافتون سنتی",
                     "subcaption": "Honoring generations of Persian baking heritage.",
+                    "subcaption_fa": "پاسداشت نسل‌ها سنت نانوایی ایرانی.",
                 },
                 {
                     "id": "slide-3", "order": 3, "type": "image",
                     "file": None,
                     "caption": "Pure Homemade Dairy",
+                    "caption_fa": "لبنیات خانگی خالص",
                     "subcaption": "Cream, yogurt, and doogh crafted fresh from local milk.",
+                    "subcaption_fa": "خامه، ماست و دوغ، هر روز از شیر محلی تازه.",
                 },
             ]
         })
@@ -190,6 +194,35 @@ def _seed_defaults() -> None:
 
 
 _seed_defaults()
+
+
+# ── Data migration (adds new fields to existing data safely) ─────────────────
+def _migrate_data() -> None:
+    products_file = DATA_DIR / "products.json"
+    if products_file.exists():
+        data    = _read_json(products_file)
+        changed = False
+        for p in data.get("products", []):
+            if "description_fa" not in p:
+                p["description_fa"] = ""
+                changed = True
+        if changed:
+            _write_json(products_file, data)
+
+    slider_file = DATA_DIR / "slider.json"
+    if slider_file.exists():
+        data    = _read_json(slider_file)
+        changed = False
+        for item in data.get("items", []):
+            for field in ("caption_fa", "subcaption_fa"):
+                if field not in item:
+                    item[field] = ""
+                    changed = True
+        if changed:
+            _write_json(slider_file, data)
+
+
+_migrate_data()
 
 
 # ── CSRF helpers ─────────────────────────────────────────────────────────────
@@ -209,6 +242,35 @@ def _check_csrf() -> bool:
 
 
 app.jinja_env.globals["csrf_token"] = _get_csrf_token
+
+
+# ── i18n context processor ───────────────────────────────────────────────────
+@app.context_processor
+def inject_i18n() -> dict:
+    lang = request.cookies.get("nb_lang", "en")
+    if "lang" in session:
+        lang = session["lang"]
+    if lang not in _translations:
+        lang = "en"
+    trans    = _translations[lang]
+    en_trans = _translations.get("en", {})
+
+    def t(key: str) -> str:
+        return trans.get(key) or en_trans.get(key) or key
+
+    return dict(t=t, lang=lang, is_rtl=(lang == "fa"))
+
+
+# ── Language switcher route ───────────────────────────────────────────────────
+@app.route("/set-language/<lang>")
+def set_language(lang: str):
+    referrer = request.referrer or url_for("index")
+    if lang not in ("en", "fa"):
+        return redirect(referrer)
+    session["lang"] = lang
+    resp = make_response(redirect(referrer))
+    resp.set_cookie("nb_lang", lang, max_age=30 * 24 * 3600, samesite="Lax")
+    return resp
 
 
 # ── Auth decorator ────────────────────────────────────────────────────────────
@@ -339,9 +401,11 @@ def admin_slider_upload():
         flash("Invalid request.", "danger")
         return redirect(url_for("admin_slider"))
 
-    caption    = request.form.get("caption", "").strip()[:200]
-    subcaption = request.form.get("subcaption", "").strip()[:300]
-    file       = request.files.get("file")
+    caption       = request.form.get("caption",       "").strip()[:200]
+    subcaption    = request.form.get("subcaption",    "").strip()[:300]
+    caption_fa    = request.form.get("caption_fa",    "").strip()[:200]
+    subcaption_fa = request.form.get("subcaption_fa", "").strip()[:300]
+    file          = request.files.get("file")
 
     data  = _read_json(DATA_DIR / "slider.json")
     items = data.get("items", [])
@@ -353,12 +417,14 @@ def admin_slider_upload():
         ftype = "video" if ext in ALLOWED_VIDEO_EXT else "image"
 
     items.append({
-        "id":         f"slide-{uuid.uuid4().hex[:8]}",
-        "order":      len(items) + 1,
-        "type":       ftype,
-        "file":       saved_name,
-        "caption":    caption,
-        "subcaption": subcaption,
+        "id":            f"slide-{uuid.uuid4().hex[:8]}",
+        "order":         len(items) + 1,
+        "type":          ftype,
+        "file":          saved_name,
+        "caption":       caption,
+        "subcaption":    subcaption,
+        "caption_fa":    caption_fa,
+        "subcaption_fa": subcaption_fa,
     })
     data["items"] = items
     _write_json(DATA_DIR / "slider.json", data)
@@ -376,14 +442,18 @@ def admin_slider_update(slide_id):
     data  = _read_json(DATA_DIR / "slider.json")
     items = data.get("items", [])
 
-    caption    = request.form.get("caption", "").strip()[:200]
-    subcaption = request.form.get("subcaption", "").strip()[:300]
-    file       = request.files.get("file")
+    caption       = request.form.get("caption",       "").strip()[:200]
+    subcaption    = request.form.get("subcaption",    "").strip()[:300]
+    caption_fa    = request.form.get("caption_fa",    "").strip()[:200]
+    subcaption_fa = request.form.get("subcaption_fa", "").strip()[:300]
+    file          = request.files.get("file")
 
     for item in items:
         if item["id"] == slide_id:
-            item["caption"]    = caption
-            item["subcaption"] = subcaption
+            item["caption"]       = caption
+            item["subcaption"]    = subcaption
+            item["caption_fa"]    = caption_fa
+            item["subcaption_fa"] = subcaption_fa
             if file and file.filename:
                 saved = _save_upload(file, SLIDER_UPLOAD_DIR, ALLOWED_ALL_EXT)
                 if saved:
@@ -460,19 +530,21 @@ def admin_product_update(product_id):
         flash("Invalid request.", "danger")
         return redirect(url_for("admin_products"))
 
-    name        = request.form.get("name", "").strip()[:100]
-    name_fa     = request.form.get("name_fa", "").strip()[:100]
-    description = request.form.get("description", "").strip()[:600]
-    file        = request.files.get("image")
+    name           = request.form.get("name",           "").strip()[:100]
+    name_fa        = request.form.get("name_fa",        "").strip()[:100]
+    description    = request.form.get("description",    "").strip()[:600]
+    description_fa = request.form.get("description_fa", "").strip()[:600]
+    file           = request.files.get("image")
 
     data     = _read_json(DATA_DIR / "products.json")
     products = data.get("products", [])
 
     for p in products:
         if p["id"] == product_id:
-            if name:        p["name"]        = name
-            if name_fa:     p["name_fa"]     = name_fa
-            if description: p["description"] = description
+            if name:           p["name"]           = name
+            if name_fa:        p["name_fa"]        = name_fa
+            if description:    p["description"]    = description
+            if description_fa: p["description_fa"] = description_fa
             if file and file.filename:
                 saved = _save_upload(file, PRODUCTS_UPLOAD_DIR, ALLOWED_IMAGE_EXT)
                 if saved:

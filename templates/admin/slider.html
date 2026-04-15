@@ -20,16 +20,28 @@
 
       <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
         <div class="field">
-          <label for="new-caption">Main Caption *</label>
+          <label for="new-caption">Main Caption (English) *</label>
           <input type="text" id="new-caption" name="caption"
                  placeholder="e.g. Welcome to Nehmat Bakery"
                  maxlength="200" required>
         </div>
         <div class="field">
-          <label for="new-subcaption">Sub-caption</label>
+          <label for="new-caption-fa">کپشن فارسی (Persian Caption)</label>
+          <input type="text" id="new-caption-fa" name="caption_fa"
+                 placeholder="مثلاً خوش آمدید"
+                 dir="rtl" maxlength="200">
+        </div>
+        <div class="field">
+          <label for="new-subcaption">Sub-caption (English)</label>
           <input type="text" id="new-subcaption" name="subcaption"
                  placeholder="e.g. Fresh bread every morning"
                  maxlength="300">
+        </div>
+        <div class="field">
+          <label for="new-subcaption-fa">زیرنویس فارسی (Persian Sub-caption)</label>
+          <input type="text" id="new-subcaption-fa" name="subcaption_fa"
+                 placeholder="مثلاً هر صبح نان تازه"
+                 dir="rtl" maxlength="300">
         </div>
       </div>
 
@@ -132,14 +144,24 @@
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
 
             <div class="field">
-              <label>Main Caption</label>
+              <label>Main Caption (English)</label>
               <input type="text" name="caption"
                      value="{{ slide.caption }}" maxlength="200" required>
             </div>
             <div class="field">
-              <label>Sub-caption</label>
+              <label>کپشن فارسی (Persian Caption)</label>
+              <input type="text" name="caption_fa"
+                     value="{{ slide.caption_fa or '' }}" dir="rtl" maxlength="200">
+            </div>
+            <div class="field">
+              <label>Sub-caption (English)</label>
               <input type="text" name="subcaption"
                      value="{{ slide.subcaption }}" maxlength="300">
+            </div>
+            <div class="field">
+              <label>زیرنویس فارسی (Persian Sub-caption)</label>
+              <input type="text" name="subcaption_fa"
+                     value="{{ slide.subcaption_fa or '' }}" dir="rtl" maxlength="300">
             </div>
 
             <div class="field" style="grid-column:1/-1;">

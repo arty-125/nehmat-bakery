@@ -2,7 +2,7 @@
    Nehmat Bakery — Admin Panel Stylesheet
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap');
 
 /* ── Variables ──────────────────────────────────────────────── */
 :root {
@@ -23,7 +23,7 @@
   --a-shadow:    0 1px 4px rgba(0,0,0,.07), 0 4px 16px rgba(0,0,0,.05);
   --a-t:         0.2s ease;
   --sidebar-w:   248px;
-  --font:        'Inter', 'Segoe UI', sans-serif;
+  --font:        'Vazirmatn', 'Segoe UI', sans-serif;
 }
 
 /* ── Reset ──────────────────────────────────────────────────── */
@@ -518,3 +518,41 @@ ul { list-style: none; }
   background: rgba(0,0,0,.45);
 }
 .sidebar-overlay.active { display: block; }
+
+/* ── Admin RTL Overrides ──────────────────────────────────── */
+/* Sidebar stays on LEFT even in RTL (global admin convention)   */
+
+[dir="rtl"] .admin-topbar { direction: rtl; }
+[dir="rtl"] .topbar-title { text-align: right; }
+[dir="rtl"] .topbar-actions { flex-direction: row-reverse; }
+
+[dir="rtl"] .panel-header { flex-direction: row-reverse; }
+[dir="rtl"] .panel-header h2 { text-align: right; }
+
+[dir="rtl"] .stat-card { flex-direction: row-reverse; }
+[dir="rtl"] .stat-label,
+[dir="rtl"] .stat-value { text-align: right; }
+
+/* RTL: keep sidebar on left, just mirror content area text */
+[dir="rtl"] .admin-content { direction: rtl; }
+[dir="rtl"] .field label { text-align: right; }
+[dir="rtl"] .field-row { direction: rtl; }
+
+/* Slide list */
+[dir="rtl"] .slide-meta { text-align: right; }
+[dir="rtl"] .slide-meta strong { text-align: right; }
+
+/* Product admin cards */
+[dir="rtl"] .product-admin-header { flex-direction: row-reverse; }
+[dir="rtl"] .product-admin-name { text-align: right; }
+[dir="rtl"] .product-admin-name-fa { text-align: right; }
+
+/* Settings */
+[dir="rtl"] .settings-card { direction: rtl; }
+
+/* Sidebar toggle: on mobile in RTL move to right side */
+@media (max-width: 900px) {
+  [dir="rtl"] .sidebar-toggle {
+    left: auto; right: 1rem;
+  }
+}

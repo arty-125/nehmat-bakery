@@ -6,7 +6,9 @@
       "type": "video",
       "file": "665092c6051b421985142e7a14b93c51.mov",
       "caption": "Welcome to Nehmat Bakery",
-      "subcaption": "Fresh bread & dairy, made with love every morning."
+      "subcaption": "Fresh bread & dairy, made with love every morning.",
+      "caption_fa": "بهترین نان سنتی",
+      "subcaption_fa": "تافتون سفید و سبوس‌دار، هر صبح تازه پخته می‌شود."
     },
     {
       "id": "slide-3",
@@ -14,7 +16,9 @@
       "type": "video",
       "file": "10bb349ab9d6474d863c272582c5b93f.mov",
       "caption": "Traditional Taftoon Bread",
-      "subcaption": "Honoring generations of Persian baking heritage."
+      "subcaption": "Honoring generations of Persian baking heritage.",
+      "caption_fa": "لبنیات خانگی خالص",
+      "subcaption_fa": "سرشیر، خامه و ماست — با شیر محلی تازه."
     },
     {
       "id": "slide-2",
@@ -22,7 +26,9 @@
       "type": "video",
       "file": "f227c9d09a434cc1ac1e8d9ff3e58da4.mov",
       "caption": "Pure Homemade Dairy",
-      "subcaption": "Cream, yogurt, and doogh crafted fresh from local milk."
+      "subcaption": "Cream, yogurt, and doogh crafted fresh from local milk.",
+      "caption_fa": "هر روز تازه از تنور",
+      "subcaption_fa": "کیفیتی که در هر لقمه احساس می‌کنید."
     }
   ]
 }

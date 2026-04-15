@@ -33,11 +33,11 @@
 
       <!-- Text content -->
       <div class="slide-content">
-        <span class="label">Nehmat Bakery &nbsp;·&nbsp; نعمت</span>
-        <h1>{{ slide.caption }}</h1>
-        <p class="sub">{{ slide.subcaption }}</p>
+        <span class="label">{{ t('site.name') }} &nbsp;·&nbsp; نعمت</span>
+        <h1>{{ slide.caption_fa if (is_rtl and slide.caption_fa) else slide.caption }}</h1>
+        <p class="sub">{{ slide.subcaption_fa if (is_rtl and slide.subcaption_fa) else slide.subcaption }}</p>
         <div class="slide-cta">
-          <a href="#products" class="btn btn-ghost">Explore Products</a>
+          <a href="#products" class="btn btn-ghost">{{ t('hero.cta') }}</a>
         </div>
       </div>
 
@@ -49,11 +49,11 @@
       <div class="slide-ornament" aria-hidden="true"></div>
       <div class="slide-overlay"  aria-hidden="true"></div>
       <div class="slide-content">
-        <span class="label">Nehmat Bakery &nbsp;·&nbsp; نعمت</span>
-        <h1>Welcome to Nehmat Bakery</h1>
-        <p class="sub">Fresh bread &amp; dairy, made with love every morning.</p>
+        <span class="label">{{ t('site.name') }} &nbsp;·&nbsp; نعمت</span>
+        <h1>{{ t('hero.brand') }}</h1>
+        <p class="sub">{{ t('site.description') }}</p>
         <div class="slide-cta">
-          <a href="#products" class="btn btn-ghost">Explore Products</a>
+          <a href="#products" class="btn btn-ghost">{{ t('hero.cta') }}</a>
         </div>
       </div>
     </div>
@@ -87,11 +87,10 @@
   <div class="container">
 
     <div class="section-header reveal">
-      <span class="label">Our Products</span>
-      <h2 id="products-heading">Freshly Made, Every Day</h2>
+      <span class="label">{{ t('products.label') }}</span>
+      <h2 id="products-heading">{{ t('products.heading') }}</h2>
       <div class="divider"></div>
-      <p>From golden Taftoon bread to rich dairy delights — every item crafted
-         with honest ingredients and generations of know-how.</p>
+      <p>{{ t('products.subtext') }}</p>
     </div>
 
     <div class="products-grid">
@@ -116,9 +115,9 @@
         </div>
 
         <div class="product-body">
-          <h3 class="product-name">{{ product.name }}</h3>
-          <p class="product-name-fa">{{ product.name_fa }}</p>
-          <p class="product-desc">{{ product.description }}</p>
+          <h3 class="product-name">{{ product.name_fa if is_rtl else product.name }}</h3>
+          {% if not is_rtl %}<p class="product-name-fa">{{ product.name_fa }}</p>{% endif %}
+          <p class="product-desc">{{ product.description_fa if (is_rtl and product.description_fa) else product.description }}</p>
         </div>
 
       </article>
@@ -140,19 +139,15 @@
 
       <div class="about-text">
         <div class="section-header reveal">
-          <span class="label">Our Story</span>
-          <h2 id="about-teaser-heading">A Home Built on Bread &amp; Love</h2>
+          <span class="label">{{ t('about.teaser.label') }}</span>
+          <h2 id="about-teaser-heading">{{ t('about.teaser.heading') }}</h2>
           <div class="divider"></div>
         </div>
         <p class="reveal reveal-delay-1">
-          Nehmat Bakery was born from a simple belief: that the best food
-          comes from patient hands, honest ingredients, and a genuine love
-          for the craft. Our traditional Taftoon breads are baked fresh
-          each morning, and our dairy products are made from locally sourced
-          milk — nothing added, nothing compromised.
+          {{ t('about.teaser.body') }}
         </p>
         <a href="{{ url_for('about') }}" class="btn btn-outline reveal reveal-delay-2">
-          Learn More About Us
+          {{ t('about.teaser.cta') }}
         </a>
       </div>
 
@@ -168,32 +163,32 @@
   <div class="container">
 
     <div class="section-header">
-      <span class="label">Why Nehmat?</span>
-      <h2 id="why-heading">Quality You Can Taste</h2>
+      <span class="label">{{ t('why.label') }}</span>
+      <h2 id="why-heading">{{ t('why.heading') }}</h2>
       <div class="divider"></div>
-      <p>Four reasons our neighbours keep coming back, morning after morning.</p>
+      <p>{{ t('why.subtext') }}</p>
     </div>
 
     <div class="why-grid">
       <div class="why-card reveal">
         <span class="why-icon">🌾</span>
-        <h4>Pure Ingredients</h4>
-        <p>No preservatives, no artificial additives. Just flour, water, and time.</p>
+        <h4>{{ t('why.1.title') }}</h4>
+        <p>{{ t('why.1.body') }}</p>
       </div>
       <div class="why-card reveal reveal-delay-1">
         <span class="why-icon">🌅</span>
-        <h4>Baked Daily</h4>
-        <p>Every loaf and batch of dairy is made fresh each morning — never yesterday's.</p>
+        <h4>{{ t('why.2.title') }}</h4>
+        <p>{{ t('why.2.body') }}</p>
       </div>
       <div class="why-card reveal reveal-delay-2">
         <span class="why-icon">🏡</span>
-        <h4>Homemade Quality</h4>
-        <p>A small home kitchen means personal attention in every single product.</p>
+        <h4>{{ t('why.3.title') }}</h4>
+        <p>{{ t('why.3.body') }}</p>
       </div>
       <div class="why-card reveal reveal-delay-3">
         <span class="why-icon">❤️</span>
-        <h4>Made with Care</h4>
-        <p>Traditional Persian recipes passed down through generations, lovingly preserved.</p>
+        <h4>{{ t('why.4.title') }}</h4>
+        <p>{{ t('why.4.body') }}</p>
       </div>
     </div>
 

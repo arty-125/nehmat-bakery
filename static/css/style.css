@@ -1,10 +1,10 @@
 /* ============================================================
    Nehmat Bakery — Public Stylesheet
    Palette : warm cream · gold · deep brown
-   Fonts   : Playfair Display (display) · Poppins (body)
+   Fonts   : Vazirmatn (bilingual — Persian & Latin)
    ============================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700;800&family=Poppins:wght@300;400;500;600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800&display=swap');
 
 /* ── CSS Custom Properties ──────────────────────────────────── */
 :root {
@@ -27,8 +27,8 @@
   --radius-lg:      22px;
   --ease:           cubic-bezier(0.4, 0, 0.2, 1);
   --t:              0.3s;
-  --font-d:         'Playfair Display', Georgia, serif;
-  --font-b:         'Poppins', 'Segoe UI', sans-serif;
+  --font-d:         'Vazirmatn', 'Segoe UI', sans-serif;
+  --font-b:         'Vazirmatn', 'Segoe UI', sans-serif;
   --header-h:       76px;
   --max-w:          1200px;
 }
@@ -445,7 +445,7 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.7rem); }
 }
 .product-placeholder span.icon { font-size: 3rem; }
 .product-placeholder span.name-fa {
-  font-family: 'Playfair Display', Georgia, serif;
+  font-family: var(--font-d);
   font-size: 1.3rem;
   color: rgba(255,255,255,.9);
   text-shadow: 0 1px 4px rgba(0,0,0,.3);
@@ -774,3 +774,131 @@ h3 { font-size: clamp(1.2rem, 2vw, 1.7rem); }
 .reveal-delay-3 { transition-delay: .3s; }
 .reveal-delay-4 { transition-delay: .4s; }
 .reveal-delay-5 { transition-delay: .5s; }
+
+/* ── Language Switcher ───────────────────────────────────────── */
+.lang-switcher {
+  display: flex; align-items: center; gap: .25rem;
+  margin-inline-start: .5rem;
+}
+.lang-btn {
+  font-size: .78rem; font-weight: 600;
+  padding: .3rem .55rem;
+  border-radius: 6px;
+  color: var(--text-soft);
+  transition: all var(--t) var(--ease);
+  line-height: 1;
+  letter-spacing: .03em;
+}
+.lang-btn:hover {
+  color: var(--primary);
+  background: var(--cream-3);
+}
+.lang-btn.active {
+  color: #fff;
+  background: var(--primary);
+}
+.lang-divider {
+  color: var(--border);
+  font-size: .75rem;
+  user-select: none;
+}
+
+/* ── RTL Overrides ───────────────────────────────────────────── */
+/* Applied when <html dir="rtl"> (Farsi mode)                     */
+
+[dir="rtl"] body {
+  text-align: right;
+}
+
+/* Header: logo moves to right, hamburger to left (natural RTL flex) */
+[dir="rtl"] .header-inner {
+  flex-direction: row-reverse;
+}
+[dir="rtl"] .logo { flex-direction: row-reverse; }
+[dir="rtl"] .logo-text { text-align: right; }
+
+/* Mobile nav drawer: same width, text right */
+[dir="rtl"] .nav-list { direction: rtl; }
+[dir="rtl"] .nav-list a::after {
+  transform-origin: right center;
+}
+
+/* Language switcher: push to the opposite visual edge */
+[dir="rtl"] .lang-switcher { margin-inline-start: 0; margin-inline-end: .5rem; }
+
+/* Slider arrows swap: prev on RIGHT, next on LEFT */
+[dir="rtl"] .slider-arrow.prev {
+  left: auto;
+  right: 1.25rem;
+}
+[dir="rtl"] .slider-arrow.next {
+  right: auto;
+  left: 1.25rem;
+}
+@media (max-width: 640px) {
+  [dir="rtl"] .slider-arrow.prev { right: .75rem; left: auto; }
+  [dir="rtl"] .slider-arrow.next { left: .75rem; right: auto; }
+}
+
+/* Slide label & text */
+[dir="rtl"] .slide-content { direction: rtl; }
+
+/* Products */
+[dir="rtl"] .product-body { text-align: right; }
+[dir="rtl"] .product-name-fa { direction: ltr; text-align: right; }
+
+/* "About" teaser: visual on right, text on left in RTL */
+[dir="rtl"] .about-teaser-inner,
+[dir="rtl"] .about-story {
+  direction: rtl;
+}
+[dir="rtl"] .about-text .section-header { text-align: right; }
+[dir="rtl"] .about-text .divider { margin: .75rem 0 0; }
+[dir="rtl"] .about-text p    { text-align: right; }
+[dir="rtl"] .about-text .btn { text-align: center; }
+@media (max-width: 820px) {
+  [dir="rtl"] .about-text .section-header { text-align: center; }
+  [dir="rtl"] .about-text p               { text-align: center; }
+}
+
+/* Why section */
+[dir="rtl"] .why-card { direction: rtl; }
+[dir="rtl"] .why-card h4,
+[dir="rtl"] .why-card p { text-align: right; }
+
+/* About page */
+[dir="rtl"] .about-story-text { direction: rtl; text-align: right; }
+[dir="rtl"] .about-story-text h2 { text-align: right; }
+[dir="rtl"] .about-story-text p  { text-align: right; }
+[dir="rtl"] .value-card { direction: rtl; text-align: right; }
+[dir="rtl"] .section-header { direction: rtl; }
+[dir="rtl"] .section-header p { text-align: right; }
+
+/* Contact page */
+[dir="rtl"] .contact-grid { direction: rtl; }
+[dir="rtl"] .contact-info h2,
+[dir="rtl"] .contact-info p { text-align: right; }
+[dir="rtl"] .contact-item { flex-direction: row-reverse; text-align: right; }
+[dir="rtl"] .contact-item-text { text-align: right; }
+[dir="rtl"] .contact-form-wrap { direction: rtl; }
+[dir="rtl"] .contact-form-wrap h3 { text-align: right; }
+[dir="rtl"] .form-group label { text-align: right; }
+
+/* Footer */
+[dir="rtl"] .footer-tagline { direction: rtl; }
+[dir="rtl"] .footer-copy { direction: rtl; }
+
+/* Page hero */
+[dir="rtl"] .page-hero { direction: rtl; }
+
+/* Forms: inputs auto-detect content direction */
+input[type="text"], input[type="email"],
+input[type="tel"], textarea {
+  direction: auto;
+}
+
+/* Error page */
+[dir="rtl"] .error-page { direction: rtl; }
+
+/* Flash messages */
+[dir="rtl"] .flash-messages { direction: rtl; }

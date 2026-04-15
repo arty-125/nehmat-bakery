@@ -65,11 +65,20 @@
         </div>
 
         <div class="field">
-          <label for="desc-{{ product.id }}">Description</label>
+          <label for="desc-{{ product.id }}">Description (English)</label>
           <textarea id="desc-{{ product.id }}"
                     name="description"
                     maxlength="600"
                     rows="3">{{ product.description }}</textarea>
+        </div>
+
+        <div class="field">
+          <label for="desc-fa-{{ product.id }}">توضیحات فارسی (Persian Description)</label>
+          <textarea id="desc-fa-{{ product.id }}"
+                    name="description_fa"
+                    maxlength="600"
+                    rows="3"
+                    dir="rtl">{{ product.description_fa or '' }}</textarea>
         </div>
 
         <div class="field">
