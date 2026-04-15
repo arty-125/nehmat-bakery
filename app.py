@@ -247,11 +247,11 @@ app.jinja_env.globals["csrf_token"] = _get_csrf_token
 # ── i18n context processor ───────────────────────────────────────────────────
 @app.context_processor
 def inject_i18n() -> dict:
-    lang = request.cookies.get("nb_lang", "en")
+    lang = request.cookies.get("nb_lang", "fa")
     if "lang" in session:
         lang = session["lang"]
     if lang not in _translations:
-        lang = "en"
+        lang = "fa"
     trans    = _translations[lang]
     en_trans = _translations.get("en", {})
 
