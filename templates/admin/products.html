@@ -1,0 +1,108 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Products{% endblock %}
+{% block page_title %}Product Management{% endblock %}
+{% block page_sub %}Click the + button on any card to edit its details{% endblock %}
+
+{% block content %}
+
+<div class="product-admin-grid">
+  {% set icons = ['🫓','🍞','🥛','🍶','🥣','🥤'] %}
+
+  {% for product in products %}
+  <div class="product-admin-card">
+
+    <!-- Card header -->
+    <div class="product-admin-header">
+      <div class="product-admin-thumb" aria-hidden="true">
+        {% if product.image %}
+          <img src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
+               alt="{{ product.name }}" loading="lazy">
+        {% else %}
+          <div class="product-admin-thumb-ph p{{ product.id }}">
+            {{ icons[loop.index0] if loop.index0 < icons|length else '🥖' }}
+          </div>
+        {% endif %}
+      </div>
+
+      <div style="flex:1; min-width:0;">
+        <div class="product-admin-name">{{ product.name }}</div>
+        <div class="product-admin-name-fa">{{ product.name_fa }}</div>
+      </div>
+
+      <button class="expand-btn"
+              aria-expanded="false"
+              aria-label="Edit {{ product.name }}"
+              title="Edit">+</button>
+    </div>
+
+    <!-- Collapsible edit form -->
+    <div class="product-edit-form" id="product-form-{{ product.id }}">
+      <form method="post"
+            action="{{ url_for('admin_product_update', product_id=product.id) }}"
+            enctype="multipart/form-data"
+            novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="field-row">
+          <div class="field">
+            <label for="name-{{ product.id }}">English Name</label>
+            <input type="text"
+                   id="name-{{ product.id }}"
+                   name="name"
+                   value="{{ product.name }}"
+                   maxlength="100" required>
+          </div>
+          <div class="field">
+            <label for="name-fa-{{ product.id }}">Persian Name (نام فارسی)</label>
+            <input type="text"
+                   id="name-fa-{{ product.id }}"
+                   name="name_fa"
+                   value="{{ product.name_fa }}"
+                   dir="rtl"
+                   maxlength="100">
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="desc-{{ product.id }}">Description</label>
+          <textarea id="desc-{{ product.id }}"
+                    name="description"
+                    maxlength="600"
+                    rows="3">{{ product.description }}</textarea>
+        </div>
+
+        <div class="field">
+          <label>Product Image</label>
+          <div class="file-input-wrap">
+            <input type="file" name="image"
+                   id="img-{{ product.id }}"
+                   accept=".jpg,.jpeg,.png,.gif,.webp">
+            <div class="file-input-label">📎 &nbsp;Choose image…</div>
+          </div>
+          <p class="file-hint">Accepted: JPG, PNG, GIF, WebP — max 50 MB</p>
+          {% if product.image %}
+          <div class="current-file">
+            <img src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
+                 alt="Current product image">
+            Current: {{ product.image }}
+          </div>
+          {% endif %}
+        </div>
+
+        <div style="display:flex; gap:.75rem; flex-wrap:wrap;">
+          <button type="submit" class="btn btn-success btn-sm">Save Product</button>
+          <button type="button"
+                  class="btn btn-secondary btn-sm expand-btn"
+                  onclick="this.closest('.product-admin-card').querySelector('.expand-btn').click()">
+            Cancel
+          </button>
+        </div>
+
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+{% endblock %}

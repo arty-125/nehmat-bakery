@@ -1,0 +1,70 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Settings{% endblock %}
+{% block page_title %}Settings{% endblock %}
+{% block page_sub %}Manage your admin account{% endblock %}
+
+{% block content %}
+
+<div class="settings-card">
+  <h3>Change Password</h3>
+
+  <form method="post" action="{{ url_for('admin_settings') }}" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+    <div class="field">
+      <label for="current_password">Current Password</label>
+      <input type="password"
+             id="current_password"
+             name="current_password"
+             autocomplete="current-password"
+             maxlength="128"
+             required>
+    </div>
+
+    <div class="field">
+      <label for="new_password">New Password</label>
+      <input type="password"
+             id="new_password"
+             name="new_password"
+             autocomplete="new-password"
+             maxlength="128"
+             minlength="8"
+             required>
+      <p class="file-hint">Minimum 8 characters.</p>
+    </div>
+
+    <div class="field">
+      <label for="confirm_password">Confirm New Password</label>
+      <input type="password"
+             id="confirm_password"
+             name="confirm_password"
+             autocomplete="new-password"
+             maxlength="128"
+             required>
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:.5rem;">
+      Update Password
+    </button>
+
+  </form>
+</div>
+
+<!-- Info card -->
+<div class="panel" style="margin-top:1.5rem; max-width:480px;">
+  <div class="panel-header"><h2>Data &amp; Backup</h2></div>
+  <div class="panel-body" style="font-size:.88rem; color:var(--a-text-soft); line-height:1.75;">
+    <p>All site content is stored in two local folders:</p>
+    <ul style="margin-top:.75rem; list-style:disc; padding-left:1.25rem; display:flex; flex-direction:column; gap:.4rem;">
+      <li><code>data/</code> — JSON files for products and slider content</li>
+      <li><code>static/uploads/</code> — Uploaded images and videos</li>
+    </ul>
+    <p style="margin-top:.75rem;">
+      To back up everything, simply copy these two folders.
+      To restore, paste them back and restart the server.
+    </p>
+  </div>
+</div>
+
+{% endblock %}

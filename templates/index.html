@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<!-- ══════════════════════════════════════════════════════════════════
+     HERO SLIDER
+══════════════════════════════════════════════════════════════════ -->
+<section class="hero" aria-label="Featured highlights">
+
+  <div class="slides-track">
+    {% for slide in slides %}
+    <div class="slide{% if loop.first %} active{% endif %}"
+         data-index="{{ loop.index0 }}"
+         role="group"
+         aria-label="Slide {{ loop.index }} of {{ slides|length }}">
+
+      <!-- Background image or video -->
+      {% if slide.file %}
+        <div class="slide-bg"{% if slide.type == 'image' %} style="background-image:url('{{ url_for('static', filename='uploads/slider/' + slide.file) }}')"{% endif %}>
+          {% if slide.type == 'video' %}
+            <video src="{{ url_for('static', filename='uploads/slider/' + slide.file) }}"
+                   autoplay muted loop playsinline></video>
+          {% endif %}
+        </div>
+      {% endif %}
+
+      <!-- Decorative elements (CSS gradients + ornament) -->
+      <div class="slide-grain"    aria-hidden="true"></div>
+      <div class="slide-ornament" aria-hidden="true"></div>
+      <div class="slide-overlay"  aria-hidden="true"></div>
+
+      <!-- Text content -->
+      <div class="slide-content">
+        <span class="label">Nehmat Bakery &nbsp;·&nbsp; نعمت</span>
+        <h1>{{ slide.caption }}</h1>
+        <p class="sub">{{ slide.subcaption }}</p>
+        <div class="slide-cta">
+          <a href="#products" class="btn btn-ghost">Explore Products</a>
+        </div>
+      </div>
+
+    </div>
+    {% else %}
+    <!-- Fallback if no slides defined -->
+    <div class="slide active" data-index="0">
+      <div class="slide-grain"    aria-hidden="true"></div>
+      <div class="slide-ornament" aria-hidden="true"></div>
+      <div class="slide-overlay"  aria-hidden="true"></div>
+      <div class="slide-content">
+        <span class="label">Nehmat Bakery &nbsp;·&nbsp; نعمت</span>
+        <h1>Welcome to Nehmat Bakery</h1>
+        <p class="sub">Fresh bread &amp; dairy, made with love every morning.</p>
+        <div class="slide-cta">
+          <a href="#products" class="btn btn-ghost">Explore Products</a>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+
+  <!-- Arrows -->
+  {% if slides|length > 1 %}
+  <button class="slider-arrow prev" aria-label="Previous slide">&#8592;</button>
+  <button class="slider-arrow next" aria-label="Next slide">&#8594;</button>
+
+  <!-- Dots -->
+  <div class="slider-dots" role="tablist" aria-label="Slide indicators">
+    {% for slide in slides %}
+    <button class="slider-dot{% if loop.first %} active{% endif %}"
+            role="tab"
+            aria-label="Go to slide {{ loop.index }}"
+            aria-selected="{{ 'true' if loop.first else 'false' }}">
+    </button>
+    {% endfor %}
+  </div>
+  {% endif %}
+
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     FEATURED PRODUCTS
+══════════════════════════════════════════════════════════════════ -->
+<section class="products-section" id="products" aria-labelledby="products-heading">
+  <div class="container">
+
+    <div class="section-header reveal">
+      <span class="label">Our Products</span>
+      <h2 id="products-heading">Freshly Made, Every Day</h2>
+      <div class="divider"></div>
+      <p>From golden Taftoon bread to rich dairy delights — every item crafted
+         with honest ingredients and generations of know-how.</p>
+    </div>
+
+    <div class="products-grid">
+      {% for product in products %}
+      <article class="product-card reveal reveal-delay-{{ loop.index if loop.index <= 5 else 5 }}"
+               data-product="{{ product.id }}"
+               aria-label="{{ product.name }}">
+
+        <div class="product-image-wrap">
+          {% if product.image %}
+            <img src="{{ url_for('static', filename='uploads/products/' + product.image) }}"
+                 alt="{{ product.name }}"
+                 loading="lazy">
+          {% else %}
+            {# CSS-gradient placeholder with emoji & Persian name #}
+            {% set icons = ['🫓','🍞','🥛','🍶','🥣','🥤'] %}
+            <div class="product-placeholder">
+              <span class="icon">{{ icons[loop.index0] if loop.index0 < icons|length else '🥖' }}</span>
+              <span class="name-fa">{{ product.name_fa }}</span>
+            </div>
+          {% endif %}
+        </div>
+
+        <div class="product-body">
+          <h3 class="product-name">{{ product.name }}</h3>
+          <p class="product-name-fa">{{ product.name_fa }}</p>
+          <p class="product-desc">{{ product.description }}</p>
+        </div>
+
+      </article>
+      {% endfor %}
+    </div>
+
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     ABOUT TEASER
+══════════════════════════════════════════════════════════════════ -->
+<section class="about-teaser" aria-labelledby="about-teaser-heading">
+  <div class="container">
+    <div class="about-teaser-inner">
+
+      <div class="about-visual reveal" aria-hidden="true">🏠</div>
+
+      <div class="about-text">
+        <div class="section-header reveal">
+          <span class="label">Our Story</span>
+          <h2 id="about-teaser-heading">A Home Built on Bread &amp; Love</h2>
+          <div class="divider"></div>
+        </div>
+        <p class="reveal reveal-delay-1">
+          Nehmat Bakery was born from a simple belief: that the best food
+          comes from patient hands, honest ingredients, and a genuine love
+          for the craft. Our traditional Taftoon breads are baked fresh
+          each morning, and our dairy products are made from locally sourced
+          milk — nothing added, nothing compromised.
+        </p>
+        <a href="{{ url_for('about') }}" class="btn btn-outline reveal reveal-delay-2">
+          Learn More About Us
+        </a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════════════════
+     WHY CHOOSE US
+══════════════════════════════════════════════════════════════════ -->
+<section class="why-section" aria-labelledby="why-heading">
+  <div class="container">
+
+    <div class="section-header">
+      <span class="label">Why Nehmat?</span>
+      <h2 id="why-heading">Quality You Can Taste</h2>
+      <div class="divider"></div>
+      <p>Four reasons our neighbours keep coming back, morning after morning.</p>
+    </div>
+
+    <div class="why-grid">
+      <div class="why-card reveal">
+        <span class="why-icon">🌾</span>
+        <h4>Pure Ingredients</h4>
+        <p>No preservatives, no artificial additives. Just flour, water, and time.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-1">
+        <span class="why-icon">🌅</span>
+        <h4>Baked Daily</h4>
+        <p>Every loaf and batch of dairy is made fresh each morning — never yesterday's.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-2">
+        <span class="why-icon">🏡</span>
+        <h4>Homemade Quality</h4>
+        <p>A small home kitchen means personal attention in every single product.</p>
+      </div>
+      <div class="why-card reveal reveal-delay-3">
+        <span class="why-icon">❤️</span>
+        <h4>Made with Care</h4>
+        <p>Traditional Persian recipes passed down through generations, lovingly preserved.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+{% endblock %}

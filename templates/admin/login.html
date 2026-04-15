@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login — Nehmat Bakery</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🥖</text></svg>">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/admin.css') }}">
+</head>
+<body>
+
+<div class="login-page">
+
+  <!-- ── Login form ──────────────────────────────────────────── -->
+  <div class="login-left">
+    <div class="login-card">
+
+      <div class="login-brand">
+        <div class="login-brand-icon" aria-hidden="true">🥖</div>
+        <div>
+          <div class="login-brand-name">Nehmat Bakery</div>
+          <div class="login-brand-sub">Admin Panel</div>
+        </div>
+      </div>
+
+      <h1>Welcome back</h1>
+      <p class="sub">Sign in to manage your bakery content.</p>
+
+      <!-- Flash messages -->
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+          <div style="margin-bottom:1rem;">
+            {% for category, message in messages %}
+              <div class="flash-item {{ category }}" style="margin-bottom:.4rem;">{{ message }}</div>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endwith %}
+
+      <form method="post" action="{{ url_for('admin_login') }}" novalidate>
+        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+        <div class="form-field">
+          <label for="username">Username</label>
+          <input type="text"
+                 id="username"
+                 name="username"
+                 autocomplete="username"
+                 placeholder="admin"
+                 maxlength="80"
+                 required
+                 autofocus>
+        </div>
+
+        <div class="form-field">
+          <label for="password">Password</label>
+          <input type="password"
+                 id="password"
+                 name="password"
+                 autocomplete="current-password"
+                 placeholder="••••••••"
+                 maxlength="128"
+                 required>
+        </div>
+
+        <button type="submit" class="btn-login">Sign In</button>
+      </form>
+
+      <p style="font-size:.75rem; color:#9B9690; margin-top:1.5rem; text-align:center;">
+        Default: <code>admin</code> / <code>admin1234</code><br>
+        Change your password in Settings after first login.
+      </p>
+
+    </div>
+  </div>
+
+  <!-- ── Decorative right panel ─────────────────────────────── -->
+  <div class="login-right" aria-hidden="true">
+    <div class="login-bg-circle c1"></div>
+    <div class="login-bg-circle c2"></div>
+    <div class="login-right-content">
+      <h2>Fresh bread.<br>Pure dairy.<br>Every morning.</h2>
+      <p>
+        Manage your bakery slider, product listings, and account settings
+        from this private administration panel.
+      </p>
+    </div>
+  </div>
+
+</div>
+
+<script src="{{ url_for('static', filename='js/admin.js') }}"></script>
+</body>
+</html>

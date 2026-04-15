@@ -1,0 +1,78 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard{% endblock %}
+{% block page_sub %}Quick overview of your bakery content{% endblock %}
+
+{% block content %}
+
+<!-- Stat cards -->
+<div class="stat-grid">
+
+  <div class="stat-card">
+    <div class="stat-icon gold" aria-hidden="true">🖼️</div>
+    <div>
+      <div class="stat-value">{{ slide_count }}</div>
+      <div class="stat-label">Slider Items</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon green" aria-hidden="true">🛍️</div>
+    <div>
+      <div class="stat-value">{{ product_count }}</div>
+      <div class="stat-label">Products</div>
+    </div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-icon blue" aria-hidden="true">✅</div>
+    <div>
+      <div class="stat-value">Live</div>
+      <div class="stat-label">Site Status</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Quick actions -->
+<div class="panel" style="margin-bottom:1.5rem;">
+  <div class="panel-header">
+    <h2>Quick Actions</h2>
+  </div>
+  <div class="panel-body" style="display:flex; gap:1rem; flex-wrap:wrap;">
+    <a href="{{ url_for('admin_slider') }}" class="btn btn-primary">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15" aria-hidden="true">
+        <path d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"/>
+      </svg>
+      Manage Slider
+    </a>
+    <a href="{{ url_for('admin_products') }}" class="btn btn-primary">
+      <svg viewBox="0 0 20 20" fill="currentColor" width="15" height="15" aria-hidden="true">
+        <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 3H6.28l-.31-1.243A1 1 0 005 1H3z"/>
+      </svg>
+      Manage Products
+    </a>
+    <a href="{{ url_for('admin_settings') }}" class="btn btn-secondary">
+      ⚙️ Settings
+    </a>
+    <a href="{{ url_for('index') }}" class="btn btn-secondary" target="_blank" rel="noopener">
+      👁 View Public Site
+    </a>
+  </div>
+</div>
+
+<!-- Tips panel -->
+<div class="panel">
+  <div class="panel-header"><h2>Getting Started</h2></div>
+  <div class="panel-body">
+    <ul style="display:flex; flex-direction:column; gap:.75rem; color:var(--a-text-soft); font-size:.88rem;">
+      <li>📸 &nbsp;<strong>Slider</strong> — Upload images or videos for the homepage hero carousel. Drag to reorder.</li>
+      <li>📦 &nbsp;<strong>Products</strong> — Click the + button on any product card to edit its name, description, or image.</li>
+      <li>🔒 &nbsp;<strong>Settings</strong> — Change your admin password immediately after first login.</li>
+      <li>💾 &nbsp;<strong>Backup</strong> — Your data lives in the <code>data/</code> folder and <code>static/uploads/</code>. Copy these two folders to back up everything.</li>
+    </ul>
+  </div>
+</div>
+
+{% endblock %}

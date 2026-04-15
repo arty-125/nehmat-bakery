@@ -1,0 +1,175 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Slider{% endblock %}
+{% block page_title %}Slider Management{% endblock %}
+{% block page_sub %}Add, edit, reorder, and delete homepage slider items{% endblock %}
+
+{% block content %}
+
+<!-- ── Add new slide ──────────────────────────────────────────── -->
+<div class="panel" style="margin-bottom:1.5rem;">
+  <div class="panel-header">
+    <h2>Add New Slide</h2>
+  </div>
+  <div class="panel-body">
+    <form method="post"
+          action="{{ url_for('admin_slider_upload') }}"
+          enctype="multipart/form-data"
+          novalidate>
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+        <div class="field">
+          <label for="new-caption">Main Caption *</label>
+          <input type="text" id="new-caption" name="caption"
+                 placeholder="e.g. Welcome to Nehmat Bakery"
+                 maxlength="200" required>
+        </div>
+        <div class="field">
+          <label for="new-subcaption">Sub-caption</label>
+          <input type="text" id="new-subcaption" name="subcaption"
+                 placeholder="e.g. Fresh bread every morning"
+                 maxlength="300">
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Image or Video (optional — a gradient will display if empty)</label>
+        <div class="file-input-wrap">
+          <input type="file" name="file" id="new-slide-file"
+                 accept=".jpg,.jpeg,.png,.gif,.webp,.mp4,.webm,.ogg">
+          <div class="file-input-label">
+            📎 &nbsp;Choose image or video…
+          </div>
+        </div>
+        <p class="file-hint">Accepted: JPG, PNG, GIF, WebP, MP4, WebM — max 50 MB</p>
+      </div>
+
+      <button type="submit" class="btn btn-primary">
+        + Add Slide
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- ── Existing slides ────────────────────────────────────────── -->
+<div class="panel">
+  <div class="panel-header">
+    <h2>Current Slides ({{ slides|length }})</h2>
+    {% if slides|length > 1 %}
+    <span style="font-size:.78rem; color:var(--a-text-soft);">Drag rows to reorder</span>
+    {% endif %}
+  </div>
+  <div class="panel-body">
+
+    {% if not slides %}
+      <div class="empty-state">
+        <span class="icon">🖼️</span>
+        <p>No slides yet. Add your first one above.</p>
+      </div>
+    {% else %}
+      <div class="slide-list"
+           id="slide-list"
+           {% if slides|length > 1 %}data-sortable{% endif %}>
+
+        {% for slide in slides %}
+        <div class="slide-item"
+             {% if slides|length > 1 %}draggable="true"{% endif %}
+             data-id="{{ slide.id }}">
+
+          {% if slides|length > 1 %}
+          <!-- Drag handle -->
+          <div class="drag-handle" title="Drag to reorder" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          {% endif %}
+
+          <!-- Thumbnail -->
+          <div class="slide-thumb" aria-hidden="true">
+            {% if slide.file %}
+              {% if slide.type == 'video' %}
+                <video src="{{ url_for('static', filename='uploads/slider/' + slide.file) }}"
+                       muted playsinline style="width:100%;height:100%;object-fit:cover;"></video>
+              {% else %}
+                <img src="{{ url_for('static', filename='uploads/slider/' + slide.file) }}"
+                     alt="Slide thumbnail" loading="lazy">
+              {% endif %}
+            {% else %}
+              <div class="slide-thumb-placeholder s{{ loop.index0 % 5 }}">🖼️</div>
+            {% endif %}
+          </div>
+
+          <!-- Meta -->
+          <div class="slide-meta">
+            <strong>{{ slide.caption or '(No caption)' }}</strong>
+            <span>
+              {{ slide.subcaption[:60] ~ '…' if slide.subcaption|length > 60 else slide.subcaption }}
+              <span class="slide-badge {{ slide.type }}">{{ slide.type }}</span>
+            </span>
+          </div>
+
+          <!-- Actions -->
+          <div class="slide-actions">
+            <button type="button" class="btn btn-secondary btn-sm slide-edit-toggle"
+                    aria-expanded="false">Edit</button>
+
+            <form method="post"
+                  action="{{ url_for('admin_slider_delete', slide_id=slide.id) }}"
+                  data-confirm="Delete this slide? This cannot be undone."
+                  style="display:inline;">
+              <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+              <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+            </form>
+          </div>
+
+          <!-- Inline edit form (toggled by JS) -->
+          <form class="slide-edit-form"
+                method="post"
+                action="{{ url_for('admin_slider_update', slide_id=slide.id) }}"
+                enctype="multipart/form-data"
+                novalidate
+                style="grid-column:1/-1;">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+            <div class="field">
+              <label>Main Caption</label>
+              <input type="text" name="caption"
+                     value="{{ slide.caption }}" maxlength="200" required>
+            </div>
+            <div class="field">
+              <label>Sub-caption</label>
+              <input type="text" name="subcaption"
+                     value="{{ slide.subcaption }}" maxlength="300">
+            </div>
+
+            <div class="field" style="grid-column:1/-1;">
+              <label>Replace Image / Video (leave empty to keep current)</label>
+              <div class="file-input-wrap">
+                <input type="file" name="file"
+                       accept=".jpg,.jpeg,.png,.gif,.webp,.mp4,.webm,.ogg">
+                <div class="file-input-label">📎 &nbsp;Choose new file…</div>
+              </div>
+              {% if slide.file %}
+              <div class="current-file">
+                {% if slide.type == 'image' %}
+                  <img src="{{ url_for('static', filename='uploads/slider/' + slide.file) }}" alt="Current">
+                {% endif %}
+                Current: {{ slide.file }}
+              </div>
+              {% endif %}
+            </div>
+
+            <div style="grid-column:1/-1; display:flex; gap:.75rem;">
+              <button type="submit" class="btn btn-success btn-sm">Save Changes</button>
+            </div>
+          </form>
+
+        </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+
+  </div>
+</div>
+
+{% endblock %}
