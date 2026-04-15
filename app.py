@@ -46,10 +46,17 @@ MAX_UPLOAD_BYTES  = 50 * 1024 * 1024   # 50 MB
 
 # ── App factory ──────────────────────────────────────────────────────────────
 def _get_or_create_secret_key() -> str:
+    # Prefer environment variable (Railway / production)
+    env_key = os.environ.get("SECRET_KEY")
+    if env_key:
+        return env_key
     if SECRET_KEY_FILE.exists():
         return SECRET_KEY_FILE.read_text().strip()
     key = secrets.token_hex(32)
-    SECRET_KEY_FILE.write_text(key)
+    try:
+        SECRET_KEY_FILE.write_text(key)
+    except OSError:
+        pass  # read-only fs — key is still returned for this process
     return key
 
 
