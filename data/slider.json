@@ -3,24 +3,24 @@
     {
       "id": "slide-1",
       "order": 1,
-      "type": "image",
-      "file": null,
+      "type": "video",
+      "file": "665092c6051b421985142e7a14b93c51.mov",
       "caption": "Welcome to Nehmat Bakery",
       "subcaption": "Fresh bread & dairy, made with love every morning."
     },
     {
-      "id": "slide-2",
+      "id": "slide-3",
       "order": 2,
-      "type": "image",
-      "file": null,
+      "type": "video",
+      "file": "10bb349ab9d6474d863c272582c5b93f.mov",
       "caption": "Traditional Taftoon Bread",
       "subcaption": "Honoring generations of Persian baking heritage."
     },
     {
-      "id": "slide-3",
+      "id": "slide-2",
       "order": 3,
-      "type": "image",
-      "file": null,
+      "type": "video",
+      "file": "f227c9d09a434cc1ac1e8d9ff3e58da4.mov",
       "caption": "Pure Homemade Dairy",
       "subcaption": "Cream, yogurt, and doogh crafted fresh from local milk."
     }
