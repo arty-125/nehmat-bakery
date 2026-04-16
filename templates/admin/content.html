@@ -1,0 +1,227 @@
+{% extends "admin/base.html" %}
+
+{% block title %}Content{% endblock %}
+{% block page_title %}Content Management{% endblock %}
+{% block page_sub %}Edit the "Our Story" and "Why Nehmat?" sections on the homepage{% endblock %}
+
+{% block content %}
+
+{% set about = content.get('about', {}) %}
+{% set why   = content.get('why',   {}) %}
+
+<form method="post"
+      action="{{ url_for('admin_content_update') }}"
+      enctype="multipart/form-data"
+      novalidate>
+  <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       OUR STORY SECTION
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="panel" style="margin-bottom:1.5rem;">
+    <div class="panel-header">
+      <h2>📖 &nbsp;Our Story Section <span style="font-weight:400;font-size:.8rem;color:var(--a-text-soft);">(داستان ما)</span></h2>
+    </div>
+    <div class="panel-body">
+
+      <div class="field-row">
+        <div class="field">
+          <label for="about-label">Section Label (English)</label>
+          <input type="text" id="about-label" name="about_label"
+                 value="{{ about.get('label', 'Our Story') }}"
+                 maxlength="80" required>
+        </div>
+        <div class="field">
+          <label for="about-label-fa">برچسب بخش (فارسی)</label>
+          <input type="text" id="about-label-fa" name="about_label_fa"
+                 value="{{ about.get('label_fa', 'داستان ما') }}"
+                 dir="rtl" maxlength="80">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="about-heading">Heading (English)</label>
+          <input type="text" id="about-heading" name="about_heading"
+                 value="{{ about.get('heading', '') }}"
+                 maxlength="200" required>
+        </div>
+        <div class="field">
+          <label for="about-heading-fa">عنوان (فارسی)</label>
+          <input type="text" id="about-heading-fa" name="about_heading_fa"
+                 value="{{ about.get('heading_fa', '') }}"
+                 dir="rtl" maxlength="200">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="about-body">Body Text (English)</label>
+        <textarea id="about-body" name="about_body"
+                  maxlength="600" rows="4">{{ about.get('body', '') }}</textarea>
+      </div>
+
+      <div class="field">
+        <label for="about-body-fa">متن اصلی (فارسی)</label>
+        <textarea id="about-body-fa" name="about_body_fa"
+                  dir="rtl" maxlength="600" rows="4">{{ about.get('body_fa', '') }}</textarea>
+      </div>
+
+      <div class="field">
+        <label>Section Image <span style="color:var(--a-text-soft);font-weight:400;">(optional — shows beside the text)</span></label>
+        {% if about.get('image') %}
+        <div style="margin-bottom:.75rem;">
+          <img src="{{ url_for('static', filename='uploads/content/' + about.image) }}"
+               alt="Current story image"
+               style="max-width:200px;max-height:130px;border-radius:8px;object-fit:cover;border:1px solid var(--a-border);">
+          <div style="font-size:.78rem;color:var(--a-text-soft);margin-top:.3rem;">Current image — upload a new one to replace it</div>
+        </div>
+        {% endif %}
+        <div class="file-input-wrap">
+          <input type="file" name="about_image" id="about-image"
+                 accept=".jpg,.jpeg,.png,.gif,.webp">
+          <div class="file-input-label">📎 &nbsp;Choose image…</div>
+        </div>
+        <p class="file-hint">Accepted: JPG, PNG, GIF, WebP — max 50 MB</p>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       WHY NEHMAT SECTION
+  ══════════════════════════════════════════════════════════════ -->
+  <div class="panel" style="margin-bottom:1.5rem;">
+    <div class="panel-header">
+      <h2>✨ &nbsp;Why Nehmat? Section <span style="font-weight:400;font-size:.8rem;color:var(--a-text-soft);">(چرا نعمت؟)</span></h2>
+    </div>
+    <div class="panel-body">
+
+      <div class="field-row">
+        <div class="field">
+          <label for="why-label">Section Label (English)</label>
+          <input type="text" id="why-label" name="why_label"
+                 value="{{ why.get('label', 'Why Nehmat?') }}"
+                 maxlength="80" required>
+        </div>
+        <div class="field">
+          <label for="why-label-fa">برچسب بخش (فارسی)</label>
+          <input type="text" id="why-label-fa" name="why_label_fa"
+                 value="{{ why.get('label_fa', 'چرا نعمت؟') }}"
+                 dir="rtl" maxlength="80">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="why-heading">Heading (English)</label>
+          <input type="text" id="why-heading" name="why_heading"
+                 value="{{ why.get('heading', '') }}"
+                 maxlength="200" required>
+        </div>
+        <div class="field">
+          <label for="why-heading-fa">عنوان (فارسی)</label>
+          <input type="text" id="why-heading-fa" name="why_heading_fa"
+                 value="{{ why.get('heading_fa', '') }}"
+                 dir="rtl" maxlength="200">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="why-subtext">Sub-text (English)</label>
+          <input type="text" id="why-subtext" name="why_subtext"
+                 value="{{ why.get('subtext', '') }}"
+                 maxlength="300">
+        </div>
+        <div class="field">
+          <label for="why-subtext-fa">زیرنویس (فارسی)</label>
+          <input type="text" id="why-subtext-fa" name="why_subtext_fa"
+                 value="{{ why.get('subtext_fa', '') }}"
+                 dir="rtl" maxlength="300">
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ══════════════════════════════════════════════════════════════
+       WHY ITEMS (4 cards)
+  ══════════════════════════════════════════════════════════════ -->
+  {% set why_items = why.get('items', [{},{},{},{}]) %}
+  {% set item_defaults = [
+      {'icon':'🌾','title':'Pure Ingredients','title_fa':'مواد خالص'},
+      {'icon':'🌅','title':'Baked Daily','title_fa':'پخت روزانه'},
+      {'icon':'🏡','title':'Homemade Quality','title_fa':'کیفیت خانگی'},
+      {'icon':'❤️','title':'Made with Care','title_fa':'با محبت'},
+  ] %}
+
+  {% for i in range(4) %}
+  {% set item = why_items[i] if i < why_items|length else {} %}
+  {% set def  = item_defaults[i] %}
+
+  <div class="panel" style="margin-bottom:1rem;">
+    <div class="panel-header" style="cursor:pointer;" onclick="this.nextElementSibling.style.display=this.nextElementSibling.style.display==='none'?'block':'none'">
+      <h2 style="display:flex;align-items:center;gap:.5rem;">
+        <span style="font-size:1.3rem;">{{ item.get('icon', def.icon) }}</span>
+        Card {{ i + 1 }} —
+        <span style="font-weight:400;">{{ item.get('title', def.title) }}</span>
+        <span style="font-size:.75rem;color:var(--a-text-soft);margin-right:auto;">{{ item.get('title_fa', def.title_fa) }}</span>
+        <span style="font-size:.8rem;color:var(--a-text-soft);">▾</span>
+      </h2>
+    </div>
+    <div class="panel-body">
+      <div class="field-row">
+        <div class="field" style="max-width:120px;">
+          <label for="why-item-{{ i }}-icon">Icon (emoji)</label>
+          <input type="text" id="why-item-{{ i }}-icon"
+                 name="why_item_{{ i }}_icon"
+                 value="{{ item.get('icon', def.icon) }}"
+                 maxlength="10" style="text-align:center;font-size:1.4rem;">
+        </div>
+        <div class="field">
+          <label for="why-item-{{ i }}-title">Title (English)</label>
+          <input type="text" id="why-item-{{ i }}-title"
+                 name="why_item_{{ i }}_title"
+                 value="{{ item.get('title', def.title) }}"
+                 maxlength="100" required>
+        </div>
+        <div class="field">
+          <label for="why-item-{{ i }}-title-fa">عنوان (فارسی)</label>
+          <input type="text" id="why-item-{{ i }}-title-fa"
+                 name="why_item_{{ i }}_title_fa"
+                 value="{{ item.get('title_fa', def.title_fa) }}"
+                 dir="rtl" maxlength="100">
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="why-item-{{ i }}-body">Description (English)</label>
+        <textarea id="why-item-{{ i }}-body"
+                  name="why_item_{{ i }}_body"
+                  maxlength="300" rows="2">{{ item.get('body', '') }}</textarea>
+      </div>
+
+      <div class="field">
+        <label for="why-item-{{ i }}-body-fa">توضیحات (فارسی)</label>
+        <textarea id="why-item-{{ i }}-body-fa"
+                  name="why_item_{{ i }}_body_fa"
+                  dir="rtl" maxlength="300" rows="2">{{ item.get('body_fa', '') }}</textarea>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+
+
+  <!-- Save button -->
+  <div style="display:flex;justify-content:flex-end;padding-bottom:2rem;">
+    <button type="submit" class="btn btn-primary" style="padding:.75rem 2.5rem;font-size:1rem;">
+      💾 &nbsp;Save All Changes
+    </button>
+  </div>
+
+</form>
+
+{% endblock %}

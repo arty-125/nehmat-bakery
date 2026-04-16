@@ -1,0 +1,49 @@
+{
+  "about": {
+    "label": "Our Story",
+    "label_fa": "داستان ما",
+    "heading": "A Home Built on Bread & Love",
+    "heading_fa": "خانه‌ای بر پایه نان و محبت",
+    "body": "Nehmat Bakery was born from a simple belief: that the best food comes from patient hands, honest ingredients, and a genuine love for the craft. Our traditional Taftoon breads are baked fresh each morning, and our dairy products are made from locally sourced milk — nothing added, nothing compromised.",
+    "body_fa": "نانوایی نعمت از یک باور ساده متولد شد: بهترین غذا از دستان صبور، مواد اولیه سالم و عشق واقعی به کار سرچشمه می‌گیرد.",
+    "image": null
+  },
+  "why": {
+    "label": "Why Nehmat?",
+    "label_fa": "چرا نعمت؟",
+    "heading": "Quality You Can Taste",
+    "heading_fa": "کیفیتی که می‌چشید",
+    "subtext": "Four reasons our neighbours keep coming back, morning after morning.",
+    "subtext_fa": "چهار دلیل که همسایگان ما هر صبح بازمی‌گردند.",
+    "items": [
+      {
+        "icon": "🌾",
+        "title": "Pure Ingredients",
+        "title_fa": "مواد خالص",
+        "body": "No preservatives, no artificial additives. Just flour, water, and time.",
+        "body_fa": "بدون نگهدارنده، بدون افزودنی مصنوعی. فقط آرد، آب و صبر."
+      },
+      {
+        "icon": "🌅",
+        "title": "Baked Daily",
+        "title_fa": "پخت روزانه",
+        "body": "Every loaf and batch of dairy is made fresh each morning — never yesterday's.",
+        "body_fa": "هر قرص نان و هر بسته لبنیات هر صبح تازه تهیه می‌شود."
+      },
+      {
+        "icon": "🏡",
+        "title": "Homemade Quality",
+        "title_fa": "کیفیت خانگی",
+        "body": "A small home kitchen means personal attention in every single product.",
+        "body_fa": "آشپزخانه کوچک به معنای توجه شخصی به هر محصول است."
+      },
+      {
+        "icon": "❤️",
+        "title": "Made with Care",
+        "title_fa": "با محبت",
+        "body": "Traditional Persian recipes passed down through generations, lovingly preserved.",
+        "body_fa": "دستورهای سنتی ایرانی که از نسل‌های قدیم به ارث رسیده‌اند با عشق حفظ شده‌اند."
+      }
+    ]
+  }
+}

@@ -22,6 +22,8 @@ static/uploads/products/*
 !static/uploads/products/.gitkeep
 static/uploads/slider/*
 !static/uploads/slider/.gitkeep
+static/uploads/content/*
+!static/uploads/content/.gitkeep
 
 # OS
 .DS_Store

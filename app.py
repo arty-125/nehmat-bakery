@@ -36,6 +36,7 @@ DATA_DIR             = BASE_DIR / "data"
 UPLOADS_DIR          = BASE_DIR / "static" / "uploads"
 PRODUCTS_UPLOAD_DIR  = UPLOADS_DIR / "products"
 SLIDER_UPLOAD_DIR    = UPLOADS_DIR / "slider"
+CONTENT_UPLOAD_DIR   = UPLOADS_DIR / "content"
 SECRET_KEY_FILE      = BASE_DIR / ".secret_key"
 TRANSLATIONS_DIR     = BASE_DIR / "translations"
 
@@ -65,7 +66,7 @@ app.config["SECRET_KEY"]          = _get_or_create_secret_key()
 app.config["MAX_CONTENT_LENGTH"]  = MAX_UPLOAD_BYTES
 app.config["PERMANENT_SESSION_LIFETIME"] = timedelta(hours=8)
 
-for _d in (DATA_DIR, PRODUCTS_UPLOAD_DIR, SLIDER_UPLOAD_DIR):
+for _d in (DATA_DIR, PRODUCTS_UPLOAD_DIR, SLIDER_UPLOAD_DIR, CONTENT_UPLOAD_DIR):
     _d.mkdir(parents=True, exist_ok=True)
 
 
@@ -199,6 +200,34 @@ def _seed_defaults() -> None:
             "password_hash": generate_password_hash("admin1234"),
         })
 
+    content_file = DATA_DIR / "content.json"
+    if not content_file.exists():
+        _write_json(content_file, {
+            "about": {
+                "label":    "Our Story",
+                "label_fa": "\u062f\u0627\u0633\u062a\u0627\u0646 \u0645\u0627",
+                "heading":    "A Home Built on Bread & Love",
+                "heading_fa": "\u062e\u0627\u0646\u0647\u200c\u0627\u06cc \u0628\u0631 \u067e\u0627\u06cc\u0647 \u0646\u0627\u0646 \u0648 \u0645\u062d\u0628\u062a",
+                "body":    "Nehmat Bakery was born from a simple belief: that the best food comes from patient hands, honest ingredients, and a genuine love for the craft. Our traditional Taftoon breads are baked fresh each morning, and our dairy products are made from locally sourced milk \u2014 nothing added, nothing compromised.",
+                "body_fa": "\u0646\u0627\u0646\u0648\u0627\u06cc\u06cc \u0646\u0639\u0645\u062a \u0627\u0632 \u06cc\u06a9 \u0628\u0627\u0648\u0631 \u0633\u0627\u062f\u0647 \u0645\u062a\u0648\u0644\u062f \u0634\u062f: \u0628\u0647\u062a\u0631\u06cc\u0646 \u063a\u0630\u0627 \u0627\u0632 \u062f\u0633\u062a\u0627\u0646 \u0635\u0628\u0648\u0631\u060c \u0645\u0648\u0627\u062f \u0627\u0648\u0644\u06cc\u0647 \u0633\u0627\u0644\u0645 \u0648 \u0639\u0634\u0642 \u0648\u0627\u0642\u0639\u06cc \u0628\u0647 \u06a9\u0627\u0631 \u0633\u0631\u0686\u0634\u0645\u0647 \u0645\u06cc\u200c\u06af\u06cc\u0631\u062f.",
+                "image": None,
+            },
+            "why": {
+                "label":    "Why Nehmat?",
+                "label_fa": "\u0686\u0631\u0627 \u0646\u0639\u0645\u062a\u061f",
+                "heading":    "Quality You Can Taste",
+                "heading_fa": "\u06a9\u06cc\u0641\u06cc\u062a\u06cc \u06a9\u0647 \u0645\u06cc\u200c\u0686\u0634\u06cc\u062f",
+                "subtext":    "Four reasons our neighbours keep coming back, morning after morning.",
+                "subtext_fa": "\u0686\u0647\u0627\u0631 \u062f\u0644\u06cc\u0644 \u06a9\u0647 \u0647\u0645\u0633\u0627\u06cc\u06af\u0627\u0646 \u0645\u0627 \u0647\u0631 \u0635\u0628\u062d \u0628\u0627\u0632\u0645\u06cc\u200c\u06af\u0631\u062f\u0646\u062f.",
+                "items": [
+                    {"icon": "\U0001f33e", "title": "Pure Ingredients", "title_fa": "\u0645\u0648\u0627\u062f \u062e\u0627\u0644\u0635", "body": "No preservatives, no artificial additives. Just flour, water, and time.", "body_fa": "\u0628\u062f\u0648\u0646 \u0646\u06af\u0647\u062f\u0627\u0631\u0646\u062f\u0647\u060c \u0628\u062f\u0648\u0646 \u0627\u0641\u0632\u0648\u062f\u0646\u06cc \u0645\u0635\u0646\u0648\u0639\u06cc. \u0641\u0642\u0637 \u0622\u0631\u062f\u060c \u0622\u0628 \u0648 \u0635\u0628\u0631."},
+                    {"icon": "\U0001f305", "title": "Baked Daily", "title_fa": "\u067e\u062e\u062a \u0631\u0648\u0632\u0627\u0646\u0647", "body": "Every loaf and batch of dairy is made fresh each morning \u2014 never yesterday's.", "body_fa": "\u0647\u0631 \u0642\u0631\u0635 \u0646\u0627\u0646 \u0648 \u0647\u0631 \u0628\u0633\u062a\u0647 \u0644\u0628\u0646\u06cc\u0627\u062a \u0647\u0631 \u0635\u0628\u062d \u062a\u0627\u0632\u0647 \u062a\u0647\u06cc\u0647 \u0645\u06cc\u200c\u0634\u0648\u062f."},
+                    {"icon": "\U0001f3e1", "title": "Homemade Quality", "title_fa": "\u06a9\u06cc\u0641\u06cc\u062a \u062e\u0627\u0646\u06af\u06cc", "body": "A small home kitchen means personal attention in every single product.", "body_fa": "\u0622\u0634\u067e\u0632\u062e\u0627\u0646\u0647 \u06a9\u0648\u0686\u06a9 \u0628\u0647 \u0645\u0639\u0646\u0627\u06cc \u062a\u0648\u062c\u0647 \u0634\u062e\u0635\u06cc \u0628\u0647 \u0647\u0631 \u0645\u062d\u0635\u0648\u0644 \u0627\u0633\u062a."},
+                    {"icon": "\u2764\ufe0f", "title": "Made with Care", "title_fa": "\u0628\u0627 \u0645\u062d\u0628\u062a", "body": "Traditional Persian recipes passed down through generations, lovingly preserved.", "body_fa": "\u062f\u0633\u062a\u0648\u0631\u0647\u0627\u06cc \u0633\u0646\u062a\u06cc \u0627\u06cc\u0631\u0627\u0646\u06cc \u06a9\u0647 \u0627\u0632 \u0646\u0633\u0644\u200c\u0647\u0627\u06cc \u0642\u062f\u06cc\u0645 \u0628\u0647 \u0627\u0631\u062b \u0631\u0633\u06cc\u062f\u0647\u200c\u0627\u0646\u062f \u0628\u0627 \u0639\u0634\u0642 \u062d\u0641\u0638 \u0634\u062f\u0647\u200c\u0627\u0646\u062f."},
+                ],
+            },
+        })
+
 
 _seed_defaults()
 
@@ -324,7 +353,8 @@ def index():
         _read_json(DATA_DIR / "slider.json").get("items", []),
         key=lambda x: x.get("order", 99),
     )
-    return render_template("index.html", products=products, slides=slides)
+    content = _read_json(DATA_DIR / "content.json")
+    return render_template("index.html", products=products, slides=slides, content=content)
 
 
 @app.route("/about")
@@ -563,6 +593,66 @@ def admin_product_update(product_id):
     _write_json(DATA_DIR / "products.json", data)
     flash("Product updated.", "success")
     return redirect(url_for("admin_products"))
+
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# ADMIN — CONTENT (About Teaser & Why Section)
+# ═══════════════════════════════════════════════════════════════════════════════
+@app.route("/admin/content")
+@login_required
+def admin_content():
+    content = _read_json(DATA_DIR / "content.json")
+    return render_template("admin/content.html", content=content)
+
+
+@app.route("/admin/content/update", methods=["POST"])
+@login_required
+def admin_content_update():
+    if not _check_csrf():
+        flash("Invalid request.", "danger")
+        return redirect(url_for("admin_content"))
+
+    content = _read_json(DATA_DIR / "content.json")
+
+    # ── About section ─────────────────────────────────────────────────────────
+    about = content.setdefault("about", {})
+    for field in ("label", "label_fa", "heading", "heading_fa", "body", "body_fa"):
+        val = request.form.get(f"about_{field}", "").strip()[:600]
+        if val:
+            about[field] = val
+
+    image_file = request.files.get("about_image")
+    if image_file and image_file.filename:
+        saved = _save_upload(image_file, CONTENT_UPLOAD_DIR, ALLOWED_IMAGE_EXT)
+        if saved:
+            _delete_upload(about.get("image"), CONTENT_UPLOAD_DIR)
+            about["image"] = saved
+
+    # ── Why section ───────────────────────────────────────────────────────────
+    why = content.setdefault("why", {})
+    for field in ("label", "label_fa", "heading", "heading_fa", "subtext", "subtext_fa"):
+        val = request.form.get(f"why_{field}", "").strip()[:600]
+        if val:
+            why[field] = val
+
+    items = why.setdefault("items", [{}, {}, {}, {}])
+    for i in range(4):
+        item = items[i] if i < len(items) else {}
+        for field in ("icon", "title", "title_fa", "body", "body_fa"):
+            val = request.form.get(f"why_item_{i}_{field}", "").strip()[:300]
+            if val:
+                item[field] = val
+        if i < len(items):
+            items[i] = item
+        else:
+            items.append(item)
+    why["items"] = items
+
+    content["about"] = about
+    content["why"]   = why
+    _write_json(DATA_DIR / "content.json", content)
+    flash("Content updated successfully.", "success")
+    return redirect(url_for("admin_content"))
 
 
 # ═══════════════════════════════════════════════════════════════════════════════
