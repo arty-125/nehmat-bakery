@@ -257,6 +257,17 @@ def _migrate_data() -> None:
         if changed:
             _write_json(slider_file, data)
 
+    admin_file = DATA_DIR / "admin.json"
+    if admin_file.exists():
+        data    = _read_json(admin_file)
+        changed = False
+        for field in ("telegram_url", "instagram_url"):
+            if field not in data:
+                data[field] = ""
+                changed = True
+        if changed:
+            _write_json(admin_file, data)
+
 
 _migrate_data()
 
@@ -295,6 +306,15 @@ def inject_i18n() -> dict:
         return trans.get(key) or en_trans.get(key) or key
 
     return dict(t=t, lang=lang, is_rtl=(lang == "fa"))
+
+
+@app.context_processor
+def inject_social_urls() -> dict:
+    data = _read_json(DATA_DIR / "admin.json")
+    return dict(
+        telegram_url=data.get("telegram_url", ""),
+        instagram_url=data.get("instagram_url", ""),
+    )
 
 
 # ── Language switcher route ───────────────────────────────────────────────────
@@ -666,23 +686,39 @@ def admin_settings():
             flash("Invalid request.", "danger")
             return redirect(url_for("admin_settings"))
 
-        data       = _read_json(DATA_DIR / "admin.json")
-        current_pw = request.form.get("current_password", "")
-        new_pw     = request.form.get("new_password", "")
-        confirm_pw = request.form.get("confirm_password", "")
+        form_type = request.form.get("form_type", "password")
 
-        if not check_password_hash(data.get("password_hash", ""), current_pw):
-            flash("Current password is incorrect.", "danger")
-        elif len(new_pw) < 8:
-            flash("New password must be at least 8 characters.", "danger")
-        elif new_pw != confirm_pw:
-            flash("Passwords do not match.", "danger")
-        else:
-            data["password_hash"] = generate_password_hash(new_pw)
+        if form_type == "social":
+            data = _read_json(DATA_DIR / "admin.json")
+            telegram_url  = request.form.get("telegram_url",  "").strip()[:500]
+            instagram_url = request.form.get("instagram_url", "").strip()[:500]
+            data["telegram_url"]  = telegram_url
+            data["instagram_url"] = instagram_url
             _write_json(DATA_DIR / "admin.json", data)
-            flash("Password updated successfully.", "success")
+            flash("Social links updated successfully.", "success")
+        else:
+            data       = _read_json(DATA_DIR / "admin.json")
+            current_pw = request.form.get("current_password", "")
+            new_pw     = request.form.get("new_password", "")
+            confirm_pw = request.form.get("confirm_password", "")
 
-    return render_template("admin/settings.html")
+            if not check_password_hash(data.get("password_hash", ""), current_pw):
+                flash("Current password is incorrect.", "danger")
+            elif len(new_pw) < 8:
+                flash("New password must be at least 8 characters.", "danger")
+            elif new_pw != confirm_pw:
+                flash("Passwords do not match.", "danger")
+            else:
+                data["password_hash"] = generate_password_hash(new_pw)
+                _write_json(DATA_DIR / "admin.json", data)
+                flash("Password updated successfully.", "success")
+
+    admin_data = _read_json(DATA_DIR / "admin.json")
+    return render_template(
+        "admin/settings.html",
+        telegram_url=admin_data.get("telegram_url", ""),
+        instagram_url=admin_data.get("instagram_url", ""),
+    )
 
 
 # ═══════════════════════════════════════════════════════════════════════════════

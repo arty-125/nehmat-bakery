@@ -11,6 +11,7 @@
 
   <form method="post" action="{{ url_for('admin_settings') }}" novalidate>
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="form_type" value="password">
 
     <div class="field">
       <label for="current_password">Current Password</label>
@@ -46,6 +47,41 @@
 
     <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:.5rem;">
       Update Password
+    </button>
+
+  </form>
+</div>
+
+<!-- Social Links card -->
+<div class="settings-card" style="margin-top:1.5rem;">
+  <h3>Social Links</h3>
+
+  <form method="post" action="{{ url_for('admin_settings') }}" novalidate>
+    <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+    <input type="hidden" name="form_type" value="social">
+
+    <div class="field">
+      <label for="telegram_url">Telegram URL</label>
+      <input type="url"
+             id="telegram_url"
+             name="telegram_url"
+             value="{{ telegram_url }}"
+             placeholder="https://t.me/yourchannel"
+             maxlength="500">
+    </div>
+
+    <div class="field">
+      <label for="instagram_url">Instagram URL</label>
+      <input type="url"
+             id="instagram_url"
+             name="instagram_url"
+             value="{{ instagram_url }}"
+             placeholder="https://instagram.com/yourprofile"
+             maxlength="500">
+    </div>
+
+    <button type="submit" class="btn btn-primary" style="width:100%; justify-content:center; margin-top:.5rem;">
+      Update Social Links
     </button>
 
   </form>
