@@ -8,6 +8,9 @@ dist/
 build/
 .eggs/
 
+# Local documentation
+/README.md
+
 # Virtual environment
 venv/
 .venv/
@@ -16,14 +19,13 @@ env/
 # Flask / app secrets
 .secret_key
 .env
+data/*.lock
+data/*.tmp
 
-# Uploaded media — track directory structure but not the files themselves
+# Uploaded media
 static/uploads/products/*
-!static/uploads/products/.gitkeep
 static/uploads/slider/*
-!static/uploads/slider/.gitkeep
 static/uploads/content/*
-!static/uploads/content/.gitkeep
 
 # OS
 .DS_Store
